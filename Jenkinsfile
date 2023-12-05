@@ -30,18 +30,8 @@ pipeline {
                 script {
                     def branchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
                     def nameSubDirectory = "olha_${branchName}"
-
-                    def folderName = [
-                        'main': 'main',
-                        'develop': 'develop'
-                    ][branchName]
-
-                    if (folderName) {
-                        sh "mkdir -p /kj_deployments/${nameSubDirectory}_${folderName}"
-                        sh "cp -r dist/kood-johvi-cicd/browser/* /kj_deployments/${nameSubDirectory}_${folderName}"
-                    } else {
-                        echo "Branch not recognized for deployment."
-                    }
+                    sh "mkdir -p /kj_deployments/${nameSubDirectory}"
+                    sh "cp -r dist/kood-johvi-cicd/browser/* /kj_deployments/${nameSubDirectory}"
                 }
             }
         }
