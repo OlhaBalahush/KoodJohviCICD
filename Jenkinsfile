@@ -11,8 +11,8 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/OlhaBalahush/KoodJohviCICD.git'
             }
         }
-        stage('npm install'){
-            steps{
+        stage('npm install') {
+            steps {
                 script {
                     sh 'npm install'
                 }
@@ -28,14 +28,21 @@ pipeline {
         stage('deploy application') {
             steps {
                 script {
-                    sh "mkdir -p /kj_deployments/subDir"
-                    sh "cp -r dist/kood-johvi-cicd/browser/* /kj_deployments/subDir"
+                    def branchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+                    def nameSubDirectory = "olha_${branchName}"
+
+                    def folderName = [
+                        'main': 'main',
+                        'develop': 'develop'
+                    ][branchName]
+
+                    if (folderName) {
+                        sh "mkdir -p /kj_deployments/${nameSubDirectory}_${folderName}"
+                        sh "cp -r dist/kood-johvi-cicd/browser/* /kj_deployments/${nameSubDirectory}_${folderName}"
+                    } else {
+                        echo "Branch not recognized for deployment."
+                    }
                 }
-            }
-        }
-        stage('discord notification') {
-            steps {
-                discordSend description: '', footer: '', image: '', link: 'https://discordapp.com/api/webhooks/1180074515070459914/zl9CXKo6somXD5WPFVMi4wizdGQ-KMDuypK1GKuyA-LvkWHEfoKcfcYhbRwIY1_63Drh', result: 'FAILURE', scmWebUrl: '', thumbnail: '', title: 'Sending message', webhookURL: 'https://sebkoodjohvi.duckdns.org/generic-webhook-trigger/invoke?token=olyaToken'
             }
         }
     }
