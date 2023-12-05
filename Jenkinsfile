@@ -26,10 +26,16 @@ pipeline {
             }
         }
         stage('deploy application') {
+            when {
+                expression { 
+                    return (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop')
+                }
+            }
             steps {
                 script {
-                    def branchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
-                    def nameSubDirectory = "olha_${branchName}"
+                    def branchName = env.BRANCH_NAME
+                    def nameSubDirectory = "olha_${branchName}" // Replace YOUR_NAME with your name or identifier
+
                     sh "mkdir -p /kj_deployments/${nameSubDirectory}"
                     sh "cp -r dist/kood-johvi-cicd/browser/* /kj_deployments/${nameSubDirectory}"
                 }
