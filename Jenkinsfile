@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     def branchName = env.BRANCH_NAME
-                    def nameSubDirectory = "olha_${branchName}" // Replace YOUR_NAME with your name or identifier
+                    def nameSubDirectory = "olha_${branchName}"
 
                     sh "mkdir -p /kj_deployments/${nameSubDirectory}"
                     sh "cp -r dist/kood-johvi-cicd/browser/* /kj_deployments/${nameSubDirectory}"
