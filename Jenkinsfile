@@ -28,7 +28,7 @@ pipeline {
         stage('deploy application') {
             when {
                 expression { 
-                    return (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop')
+                    return (env.BRANCH_NAME == 'olha_main' || env.BRANCH_NAME == 'olha_develop')
                 }
             }
             steps {
